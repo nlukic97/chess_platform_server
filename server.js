@@ -1,9 +1,9 @@
 // const appMaker = require("./srcOldInJs/app")
-const appMaker = require("./public/app")
+const { appMaker } = require("./dist/app");
 
-const app = appMaker()
-const port = process.env.PORT || 8081
+const app = appMaker();
+const port = process.env.PORT || 8081;
 
 app.listen(port, () => {
-  console.log(`listening on http://localhost:${port}`);
+  console.log(`Listening on http://localhost:${port}`);
 });
