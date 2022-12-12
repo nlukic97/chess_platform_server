@@ -1,5 +1,3 @@
-const validateFEN = require('fen-validator').default;
-
 module.exports = { 
     fullFenValidation:function(fen){
         if(typeof(fen) !== 'string'){

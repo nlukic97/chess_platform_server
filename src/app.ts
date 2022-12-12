@@ -35,10 +35,10 @@ module.exports = function(){
     /* Socket.io modules */
     const initSoundBoard = require('./soundboard/soundBoard');
     
-    rooms = []
+    global.rooms = []
     
     io.on('connection', (socket) => {
-      socketRoomId = socket.handshake.query.roomId
+      const socketRoomId:Number = socket.handshake.query.roomId
       
       // If the user has not submitted a number parameter to join a room, they will be disconnected
       if(socketRoomId === undefined || socketRoomId === null){

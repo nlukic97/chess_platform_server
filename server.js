@@ -1,4 +1,5 @@
-const appMaker = require("./src/app")
+// const appMaker = require("./srcOldInJs/app")
+const appMaker = require("./public/app")
 
 const app = appMaker()
 const port = process.env.PORT || 8081
