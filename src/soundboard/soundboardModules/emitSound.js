@@ -1,4 +1,4 @@
-const { findRoom } = require('../../server_modules/findRoom')
+const { findRoom } = require('../../modules/findRoom')
 
 module.exports = {
     emitSound: function(socket, io, emitMsg){
