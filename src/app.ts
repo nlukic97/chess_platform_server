@@ -13,10 +13,13 @@ import { GameOutcome } from "./modules/GameOutcome";
 import { validateMove } from "./modules/validateMove";
 import { handleCheckmate } from "./modules/handleCheckmate";
 import { fullFenValidation } from "./modules/fullFenValidation";
+import { Router } from "./modules/Router";
 
 export function appMaker() {
   const express = require("express");
   const app = express();
+
+  Router(app, __dirname);
 
   const dotenv = require("dotenv");
   dotenv.config();
