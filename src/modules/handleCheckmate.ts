@@ -1,6 +1,6 @@
 import { GameOutcome } from "./GameOutcome";
 
-export function handleCheckmate(roomIndex) {
+export function handleCheckmate(roomIndex: Number) {
   let winner = rooms[roomIndex].players.find(
     (player) => player.playersTurn === false
   ).pieces;

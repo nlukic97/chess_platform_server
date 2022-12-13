@@ -3,6 +3,8 @@
  * Each object contains data to be assigned to players who are about to start a game.
  * The data is: which piece the player is, and if it's their turn. ('white' pieces go first, so the turn will be 'true')
  * */
+
+// Nikola - not sure what "turn" is
 export function GetPieces(turn) {
   let randNum = Math.floor(Math.random() * (2 - 0) + 0); // 0 or 1
 

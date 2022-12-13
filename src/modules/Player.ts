@@ -1,4 +1,4 @@
-export function Player(socketId) {
+export function Player(socketId: String) {
   return {
     socketId: socketId,
     pieces: undefined, //assigned upon game start

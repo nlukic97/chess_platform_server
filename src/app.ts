@@ -1,6 +1,5 @@
-import initSoundBoard from "./soundboard/soundBoard";
-import { Chess } from "chess.js"; //for the chess engie
-
+import { Chess } from "chess.js";
+import { Server, Socket } from "socket.io";
 import { validate as validateUuid } from "uuid";
 
 /* General modules */
@@ -8,23 +7,27 @@ import { Player } from "./modules/Player";
 import { findRoom } from "./modules/findRoom";
 import { ChessRoom } from "./modules/ChessRoom";
 import { GetPieces } from "./modules/GetPieces";
+import { RouterInit } from "./modules/Router";
+import initSoundBoard from "./soundboard/soundBoard";
 import { switchTurns } from "./modules/SwitchTurns";
 import { GameOutcome } from "./modules/GameOutcome";
 import { validateMove } from "./modules/validateMove";
 import { handleCheckmate } from "./modules/handleCheckmate";
 import { fullFenValidation } from "./modules/fullFenValidation";
-import { Router } from "./modules/Router";
 
 export function appMaker() {
+  const dotenv = require("dotenv");
+  dotenv.config();
   const express = require("express");
   const app = express();
 
-  Router(app, __dirname);
+  //init for router
+  RouterInit(app);
 
-  const dotenv = require("dotenv");
-  dotenv.config();
-
-  const corsRules = process.env.CORS;
+  if (process.env.CORS === null || process.env.CORS === undefined) {
+    throw new Error("Please set process.env.CORS");
+  }
+  const corsRules: String = process.env.CORS;
 
   const http = require("http");
   const server = http.createServer(app);
@@ -38,11 +41,14 @@ export function appMaker() {
 
   global.rooms = []; // Nikola - don't leave this as a global variable
 
-  io.on("connection", (socket) => {
-    const socketRoomId: Number = socket.handshake.query.roomId;
-
-    // If the user has not submitted a number parameter to join a room, they will be disconnected
-    if (socketRoomId === undefined || socketRoomId === null) {
+  io.on("connection", (socket: Socket) => {
+    // If the user has not submitted a roomId parameter to join a room, they will be disconnected
+    const socketRoomId = socket.handshake.query.roomId;
+    if (
+      typeof socketRoomId !== "string" ||
+      socketRoomId === undefined ||
+      socketRoomId === null
+    ) {
       console.log("Disconnecting user - no roomId param found");
       return socket.disconnect();
     }
@@ -56,10 +62,11 @@ export function appMaker() {
     socket.join(socketRoomId); //subscribing the user to the room id which they provided
 
     // potential for a little backdoor fun here, ide gas
-    if (socket.handshake.query.landscape === "backend")
+    if (socket.handshake.query.landscape === "backend") {
       console.log(
         "Someone special has joined, give them backdoor chess privileges"
       );
+    }
 
     // checking if a room with the submitted socketRoomId exists
     const roomIndex = rooms.findIndex((room) => room.id === socketRoomId);
@@ -214,7 +221,7 @@ export function appMaker() {
     });
 
     /** Chat message */
-    socket.on("message-sent", (msg) => {
+    socket.on("message-sent", (msg: String) => {
       console.log(msg);
       let room = findRoom(socket.id); //returns the room where there is a player with this id
       if (room) {
@@ -300,6 +307,7 @@ export function appMaker() {
           .emit("game-over", GameOutcome("player-disconnected"));
       }
 
+      // Nikola - global use of rooms. THink of making a 'Rooms' class
       // remove the player from the room, and remove this room if there are no players left
       rooms = rooms
         .map((room) => {

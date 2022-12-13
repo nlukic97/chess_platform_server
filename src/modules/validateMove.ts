@@ -4,6 +4,6 @@
  */
 
 export function validateMove(chess, move) {
-  let moveOutcome = chess.move(move);
+  const moveOutcome = chess.move(move);
   return moveOutcome === null ? false : true;
 }
