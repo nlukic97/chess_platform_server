@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "start:nodemon": "nodemon server.js",
-    "compile:ts":"tsc",
+    "start": "node ./dist/server.js",
+    "start:nodemon": "nodemon ./dist/server.js",
+    "compile:ts": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,6 +21,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/chess.js": "^0.13.4",
+    "@types/uuid": "^9.0.0",
     "nodemon": "^2.0.15",
     "typescript": "^4.9.4"
   }
