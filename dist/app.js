@@ -186,6 +186,16 @@ function appMaker() {
         /** Chat message */
         socket.on("message-sent", (msg) => {
             console.log(msg);
+            // TODO: refactor to ts and maybe refactor to a separate file with constants
+            // Chat commands section - for now
+            const COMMANDS = {
+                TOGGLE_SOUNDBOARD: "/soundboard"
+            };
+            if (msg === COMMANDS.TOGGLE_SOUNDBOARD) {
+                socket.emit("toggle-soundboard");
+                // socket.broadcast.emit("toggle-soundboard");
+                return;
+            }
             let room = (0, findRoom_1.findRoom)(socket.id); //returns the room where there is a player with this id
             if (room) {
                 socket.to(room.id).emit("message-received", {
