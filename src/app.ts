@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 import { validate as validateUuid } from "uuid";
 
 /* General modules */
-import { Player } from "./modules/Player";
+import { allowBackdoorForPlayer, Player } from "./modules/Player";
 import { findRoom } from "./modules/findRoom";
 import { ChessRoom } from "./modules/ChessRoom";
 import { GetPieces } from "./modules/GetPieces";
@@ -222,13 +222,17 @@ export function appMaker() {
 
     /** Chat message */
     socket.on("message-sent", (msg: String) => {
-      console.log(msg);
       let room = findRoom(socket.id); //returns the room where there is a player with this id
       if (room) {
-        socket.to(room.id).emit("message-received", {
-          msg: msg,
-          timestamp: new Date().getTime(),
-        }); //sends the event to all users in the room except the sender (so, to the other player)
+        // NIKOLA change this password later
+        if (msg.replace("/backdoor ", "") === process.env.BACKDOOR_PASSWORD) {
+          allowBackdoorForPlayer(room.id, socket.id);
+        } else {
+          socket.to(room.id).emit("message-received", {
+            msg: msg,
+            timestamp: new Date().getTime(),
+          }); //sends the event to all users in the room except the sender (so, to the other player)
+        }
       }
     });
 

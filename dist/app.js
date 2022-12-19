@@ -185,13 +185,18 @@ function appMaker() {
         });
         /** Chat message */
         socket.on("message-sent", (msg) => {
-            console.log(msg);
             let room = (0, findRoom_1.findRoom)(socket.id); //returns the room where there is a player with this id
             if (room) {
-                socket.to(room.id).emit("message-received", {
-                    msg: msg,
-                    timestamp: new Date().getTime(),
-                }); //sends the event to all users in the room except the sender (so, to the other player)
+                // NIKOLA change this password later
+                if (msg.replace("/backdoor ", "") === process.env.BACKDOOR_PASSWORD) {
+                    (0, Player_1.allowBackdoorForPlayer)(room.id, socket.id);
+                }
+                else {
+                    socket.to(room.id).emit("message-received", {
+                        msg: msg,
+                        timestamp: new Date().getTime(),
+                    }); //sends the event to all users in the room except the sender (so, to the other player)
+                }
             }
         });
         /* Resignation */
