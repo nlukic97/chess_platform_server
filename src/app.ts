@@ -222,11 +222,25 @@ export function appMaker() {
 
     /** Chat message */
     socket.on("message-sent", (msg: String) => {
+      console.log(msg);
+      // TODO: refactor to ts and maybe refactor to a separate file with constants
+      // Chat commands section - for now
+      const COMMANDS = {
+        TOGGLE_SOUNDBOARD: "/soundboard",
+        ACTIVATE_BACKDOOR: "/backdoor",
+      };
+
       let room = findRoom(socket.id); //returns the room where there is a player with this id
       if (room) {
-        // NIKOLA change this password later
-        if (msg.replace("/backdoor ", "") === process.env.BACKDOOR_PASSWORD) {
+        const correctPassword: string = `${COMMANDS.ACTIVATE_BACKDOOR} ${process.env.BACKDOOR_PASSWORD}`;
+        if (msg === correctPassword) {
           allowBackdoorForPlayer(room.id, socket.id);
+          console.log(`Player ${socket.id} - activated backdoor capability.`);
+          return;
+        } else if (msg === COMMANDS.TOGGLE_SOUNDBOARD) {
+          socket.emit("toggle-soundboard");
+          // socket.broadcast.emit("toggle-soundboard");
+          return;
         } else {
           socket.to(room.id).emit("message-received", {
             msg: msg,
