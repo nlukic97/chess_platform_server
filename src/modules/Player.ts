@@ -8,7 +8,7 @@ export function Player(socketId: String) {
 }
 
 // Setting the player's backdoor property to "true" if they sent the correct password
-export function allowBackdoor(roomId, playerSocketId) {
+export function allowBackdoorForPlayer(roomId, playerSocketId) {
   rooms = rooms.map((room) => {
     if (room.id == roomId) {
       const players = room.players.map((player) => {

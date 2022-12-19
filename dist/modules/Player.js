@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allowBackdoor = exports.Player = void 0;
+exports.allowBackdoorForPlayer = exports.Player = void 0;
 function Player(socketId) {
     return {
         socketId: socketId,
@@ -11,7 +11,7 @@ function Player(socketId) {
 }
 exports.Player = Player;
 // Setting the player's backdoor property to "true" if they sent the correct password
-function allowBackdoor(roomId, playerSocketId) {
+function allowBackdoorForPlayer(roomId, playerSocketId) {
     rooms = rooms.map((room) => {
         if (room.id == roomId) {
             const players = room.players.map((player) => {
@@ -29,4 +29,4 @@ function allowBackdoor(roomId, playerSocketId) {
         }
     });
 }
-exports.allowBackdoor = allowBackdoor;
+exports.allowBackdoorForPlayer = allowBackdoorForPlayer;
